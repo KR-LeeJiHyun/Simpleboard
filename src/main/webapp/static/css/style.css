@@ -1,0 +1,208 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap");
+
+.w-btn-outline {
+    position: relative;
+    text-decoration: none;
+    transition: 0.25s;
+    background-color: white;
+    color: #777;
+    border: 1px solid #000;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    margin-top: 5px;
+}
+
+.w-btn-gray-outline:hover {
+    background-color: #a3a1a1;
+    color: #e3dede;
+}
+
+.w-btn:hover {
+    letter-spacing: 2px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.w-btn-outline:hover {
+    letter-spacing: 2px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.w-btn:active {
+    transform: scale(1.5);
+}
+
+.w-btn-outline:active {
+    transform: scale(1.5);
+}
+
+@keyframes gradient1 {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes gradient2 {
+    0% {
+        background-position: 100% 50%;
+    }
+    50% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+@keyframes ring {
+    0% {
+        width: 30px;
+        height: 30px;
+        opacity: 1;
+    }
+    100% {
+        width: 300px;
+        height: 300px;
+        opacity: 0;
+    }
+}
+
+body {
+  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  background-color: #fff;
+  font-weight: 300; }
+
+p {
+  font-weight: 300; }
+
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
+
+a {
+  -webkit-transition: .3s all ease;
+  -o-transition: .3s all ease;
+  transition: .3s all ease;
+  color: #777;
+ }
+  a, a:hover {
+    text-decoration: none !important; }
+
+.content {
+  padding: 7rem 0; 
+}
+
+h2 {
+  font-size: 20px; }
+
+.custom-table {
+  text-align: center;
+  min-width: 900px;
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+ }
+  .custom-table thead tr, .custom-table thead th {
+    padding-bottom: 30px;
+    border-top: none;
+    border-bottom: none !important;
+    color: #000; }
+  .custom-table tbody th, .custom-table tbody td {
+    color: #777;
+    font-weight: 400;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    font-weight: 300;
+    border: none;
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease; }
+    .custom-table tbody th small, .custom-table tbody td small {
+      color: #b3b3b3;
+      font-weight: 300; }
+  .custom-table tbody tr {
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease; }
+    .custom-table tbody tr .name {
+      text-decoration: line-through;
+      position: relative;
+      display: inline-block; }
+      .custom-table tbody tr .name:before {
+        content: "";
+        height: 2px;
+        top: 50%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        background: #dc3545;
+        opacity: 0;
+        visibility: hidden; }
+    .custom-table tbody tr.active {
+      opacity: .4; }
+      .custom-table tbody tr.active .name:before {
+        opacity: 1;
+        visibility: visible; }
+  .custom-table .td-box-wrap {
+    padding: 0; }
+  .custom-table .box {
+    background: #fff;
+    border-radius: 4px;
+    margin-top: 15px;
+    margin-bottom: 15px; }
+    .custom-table .box td, .custom-table .box th {
+      border: none !important; }
+
+.container{
+  justify-content : center;
+}
+
+.center{
+  text-align: center;
+}
+
+ul{
+  list-style: none;
+  display: table;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+li{
+  float: left;
+  padding : 5px;
+}
+
+.active{
+  color: #2c98f0;
+}
+
+.search{
+  float: right;
+}
+
+.reg{
+  float: right;
+  border: 1px solid black;
+}
+
+.info{
+  padding-bottom: 10px;
+}
+
+textarea{
+  width: 100%;
+  height: 500px;
+}
+
+.comment{
+  margin-top: 20px;
+}
