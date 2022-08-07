@@ -220,3 +220,8 @@ textarea{
 .hashtag-text button{
   width: 20%;
 }
+
+.btn_add
+{
+	float: right;
+}
