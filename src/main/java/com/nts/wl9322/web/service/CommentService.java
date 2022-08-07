@@ -1,6 +1,6 @@
 package com.nts.wl9322.web.service;
 
-//´ñ±ÛÀ» À§ÇØ ÇÊ¿äÇÑ ¼­ºñ½º¸¦ Á¤ÀÇÇÒ ÀÎÅÍÆäÀÌ½º
+//ëŒ“ê¸€ì„ ìœ„í•œ ì„œë¹„ìŠ¤ ê¸°ëŠ¥ ì •ì˜
 public interface CommentService {
 
 }

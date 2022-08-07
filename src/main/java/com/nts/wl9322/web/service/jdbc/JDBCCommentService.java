@@ -1,6 +1,6 @@
 package com.nts.wl9322.web.service.jdbc;
 
-//´ñ±ÛÀ» À§ÇØ ÀÎÅÍÆäÀÌ½º¸¦ »ó¼Ó¹Ş¾Æ JDBC·Î ±â´ÉÀ» ±¸ÇöÇÒ ¼­ºñ½º
+//JDBCë¡œ êµ¬í˜„ëœ ëŒ“ê¸€ ì„œë¹„ìŠ¤ ê¸°ëŠ¥ êµ¬í˜„
 public class JDBCCommentService {
 
 }
