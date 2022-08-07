@@ -1,8 +1,16 @@
 package com.nts.wl9322.web.service;
 
-import com.nts.wl9322.web.entity.Post;
+import java.util.List;
 
-//°Ô½Ã±ÛÀ» À§ÇØ ÇÊ¿äÇÑ ¼­ºñ½º¸¦ Á¤ÀÇÇÒ ÀÎÅÍÆäÀÌ½º
+import com.nts.wl9322.web.entity.Post;
+import com.nts.wl9322.web.entity.PostView;
+
+//ê²Œì‹œê¸€ì„ ìœ„í•œ ì„œë¹„ìŠ¤ ê¸°ëŠ¥ ì •ì˜
 public interface PostService {
+	//ê²Œì‹œê¸€ ë“±ë¡
 	public int insertPost(Post post);
+	//ê²Œì‹œê¸€ ëª©ë¡ ì–»ì–´ì˜¤ê¸°
+	public List<PostView> getPostList(String field, String query, int page);
+	//ì „ì²´ ê²Œì‹œê¸€ ìˆ˜ ì–»ì–´ì˜¤ê¸°
+	public int getPostCount();
 }

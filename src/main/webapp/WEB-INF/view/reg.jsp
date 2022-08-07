@@ -50,12 +50,11 @@
                      	
                         <tr>
                         <th>Hashtag</th>
-                        <td colspan="6" class='hashtag'></td>
+                        <td colspan="6" class='hashtag'><button type="button" class="w-btn-outline w-btn-gray-outline btn_add">추가</button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div class="center"><button class="w-btn-outline w-btn-gray-outline btn_add">추가</div>
             <div class="center">
                 <input class="w-btn-outline w-btn-gray-outline" type="submit" value="등록" />
                 <a class="w-btn-outline w-btn-gray-outline" type="button" href="index">취소</a>

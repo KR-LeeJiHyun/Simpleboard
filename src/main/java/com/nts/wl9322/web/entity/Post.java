@@ -2,7 +2,7 @@ package com.nts.wl9322.web.entity;
 
 import java.util.Date;
 
-//°Ô½Ã±Û °´Ã¼
+//ê²Œì‹œê¸€ ê°ì²´
 public class Post {
 	
 	private int id;
@@ -18,7 +18,7 @@ public class Post {
 	
 	public Post() {}
 
-	//»ı¼ºÀÚ Á¤ÀÇ
+	//ìƒì„±ì ì •ì˜
 	public Post(int id, String title, String writer, String content, Date regdate, int hit, int like, int unlike,
 			String hashtag, String password) {
 		this.id = id;
@@ -41,7 +41,7 @@ public class Post {
 		this.password = password;
 	}
 
-	//¸â¹öµé¿¡ ´ëÇÑ getter setter
+	//ë§´ë²„ ë³€ìˆ˜ getter, setter
 	public int getId() {
 		return id;
 	}
