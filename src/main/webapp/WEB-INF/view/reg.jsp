@@ -25,31 +25,37 @@
     <div class="content">
         <div class="container">
           <h2 class="mb-4">게시글 등록</h2>
-        <form method="post">
+        <form method="post" action="reg">
             <div class="table-responsive">
                 <table class="table table-striped custom-table">
                     <tbody>
                         <tr>
                             <th>제목</th>
                             <td>
-                                <input type="text" name="title" />
+                                <input type="text" name="title" required />
                             </td>
                             <th>작성자</th>
                             <td>
-                                <input type="text" name="writer" />
+                                <input type="text" name="writer" required />
                             </td>
                             <th>비밀번호</th>
                             <td>
-                                <input type="password" name="password" />
+                                <input type="password" name="password" required />
                             </td>
                         </tr>
-                        
                         <tr>
-                            <td colspan="6"><textarea name="content"></textarea></td>
+                            <th>내용</th>
+                            <td colspan="6"><textarea name="content" required ></textarea></td>
+                        </tr>
+                     	
+                        <tr>
+                        <th>Hashtag</th>
+                        <td colspan="6" class='hashtag'></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+            <div class="center"><button class="w-btn-outline w-btn-gray-outline btn_add">추가</div>
             <div class="center">
                 <input class="w-btn-outline w-btn-gray-outline" type="submit" value="등록" />
                 <a class="w-btn-outline w-btn-gray-outline" type="button" href="index">취소</a>
@@ -63,5 +69,6 @@
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/hashtag.js"></script>
   </body>
 </html>

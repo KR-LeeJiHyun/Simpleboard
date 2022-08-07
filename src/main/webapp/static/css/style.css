@@ -206,3 +206,17 @@ textarea{
 .comment{
   margin-top: 20px;
 }
+
+.hashtag-text{
+  float: left;
+  margin: 2px;
+  width : 130px;
+}
+
+.hashtag-text input{
+  width: 70%;
+}
+
+.hashtag-text button{
+  width: 20%;
+}
