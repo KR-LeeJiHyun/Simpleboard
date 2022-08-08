@@ -3,12 +3,13 @@ package com.nts.wl9322.web.security.sha256;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.nts.wl9322.web.security.PasswordEncrypt;
 
 //SHA-256으로 password 암호화
-@Service
+@Component
 public class SHA256PasswordEncrypt implements PasswordEncrypt{
 	public String encrypt(String password) {
 		String result = null;
