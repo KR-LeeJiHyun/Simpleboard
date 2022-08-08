@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -40,8 +41,31 @@ public class RegController {
 		return "reg";
 	}
 	
-	@RequestMapping("update")
-	public String update() {
+	@RequestMapping(value = {"update"}, method = RequestMethod.GET)
+	public String update(Model model, int id) {
+		Post post = jdbcPostService.getPost(id);
+		String[] hashtags = post.getHashtag().split(",");
+		model.addAttribute("post", post);
+		model.addAttribute("hashtags", hashtags);
 		return "update";
+	}
+	
+	@RequestMapping(value = {"update"}, method = RequestMethod.POST)
+	public String update(int id, String title, String writer, String content, String hashtag, String password) {
+		String encrypt_password = sha256PasswordEncrypt.encrypt(password);
+		if(jdbcPostService.checkPassword(id, encrypt_password)) jdbcPostService.updatePost(id, title, writer, content, hashtag);
+		else System.out.println("실패!!!!");
+		
+		return "redirect:detail?id=" + id;
+	}
+	
+	@RequestMapping("delete")
+	public String delete(int id, String password) {
+		
+		String encrypt_password = sha256PasswordEncrypt.encrypt(password);
+		if(jdbcPostService.checkPassword(id, encrypt_password)) jdbcPostService.deletePost(id);
+		else System.out.println("실패!!!!");
+		
+		return "redirect:detail?id=" + id;
 	}
 }
