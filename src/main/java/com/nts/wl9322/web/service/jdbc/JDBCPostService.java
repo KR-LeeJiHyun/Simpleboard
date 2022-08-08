@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.nts.wl9322.web.entity.Post;
 import com.nts.wl9322.web.entity.PostView;
+import com.nts.wl9322.web.service.CommentService;
 import com.nts.wl9322.web.service.PostService;
 
 //JDBC로 구현된 게시글 서비스 기능 구현
@@ -25,6 +26,8 @@ public class JDBCPostService implements PostService{
 
 	@Autowired
 	private DataSource dataSource;
+	@Autowired
+	private CommentService jdbcCommentService;
 
 	//JDBC 기본 정보
 	public void setDataSource(DataSource dataSource) {
@@ -92,7 +95,7 @@ public class JDBCPostService implements PostService{
 				Date regdate = rs.getDate("REGDATE");
 				int hit = rs.getInt("HIT"); 
 				int like = rs.getInt("LIKE");
-				int cmt_count = 0;
+				int cmt_count = jdbcCommentService.getCommentCount(id);
 
 				PostView post = new PostView(id, title, writer, regdate, hit, like, cmt_count);
 				list.add(post);
