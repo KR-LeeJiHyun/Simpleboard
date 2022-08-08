@@ -31,9 +31,13 @@ public class HomeController {
 		List<PostView> list = jdbcPostService.getPostList(field, query, page);
 		model.addAttribute("list", list);
 		
-		//======게시글 수 얻어오기======
-		int post_count = jdbcPostService.getPostCount();
+		//======해당되는 게시글 수 얻어오기======
+		int post_count = jdbcPostService.getPostCount(field, query);
 		model.addAttribute("post_count", post_count);
+		
+		//======전체 게시글 수 얻어오기======
+		int total_post_count = jdbcPostService.getPostCount("TITLE", "");
+		model.addAttribute("total_post_count", total_post_count);
 		
 		return "index";
 	}
