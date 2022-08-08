@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -31,20 +33,39 @@
                     <tbody>
                         <tr>
                             <th>제목</th>
-                            <td class=class="pl-0">
-                                <input type="text" name="title" />
+                            <td>
+                                <input type="text" name="title" required value="${post.title}"/>
+                            </td>
+                            <th>작성자</th>
+                            <td>
+                                <input type="text" name="writer" required value="${post.writer}" />
                             </td>
                         </tr>
-                        
                         <tr>
-                            <td colspan="6"><textarea name="content"></textarea></td>
+                            <th>내용</th>
+                            <td colspan="4"><textarea name="content" required>${post.content}</textarea></td>
+                        </tr>
+                     	
+                        <tr>
+                        <th>Hashtag</th>
+                        <td colspan="4" class='hashtag'>
+                        	<c:forEach var="hashtag" items="${hashtags}">
+                        		<span class="hashtag-text"><input type="text" name="hashtag" required value="${hashtag}"/>
+            					<button class="btn_remove w-btn-outline w-btn-gray-outline">X</button></span>
+                        	</c:forEach>
+	                        <button type="button" class="w-btn-outline w-btn-gray-outline btn_add">추가</button>
+                        </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="center">
-                <input class="w-btn-outline w-btn-gray-outline" type="submit" value="수정" />
-                <a class="w-btn-outline w-btn-gray-outline" type="button" href="index">취소</a>
+            	<input class="hidden" name="id" value="${post.id}" readonly/>
+            	비밀번호 : 
+            	<input type="password" name="password">
+                <input class="w-btn-outline w-btn-gray-outline" type="submit" value="수정" formaction="update"/>
+                <input class="w-btn-outline w-btn-gray-outline" type="submit" value="삭제" formaction="delete"/>
+                <a class="w-btn-outline w-btn-gray-outline" type="button" href="detail?id=${post.id}">취소</a>
             </div>
         </form>
 
@@ -55,5 +76,6 @@
     <script src="js/popper.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/hashtag.js"></script>
   </body>
 </html>

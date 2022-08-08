@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -25,41 +27,52 @@
     <div class="content">
         <div class="container">
           <h2 class="mb-4">게시글</h2>
+          <button class="w-btn-outline w-btn-gray-outline reg"
+					onclick="location.href='index'">목록</button>
         <form method="post">
             <div class="table-responsive">
                 <table class="table table-striped custom-table">
                     <tbody>
                         <tr>
                             <th>제목</th>
-                            <td colspan="10">Web Designer dsklfjklsdjalksjdflksj</td>
+                            <td colspan="6">${post.title}</td>
                         </tr>
 
                         <tr>
                             <th>번호</th>
-                            <td name="id" value="2">2</td>
+                            <td name="id" value="${post.id}">${post.id}</td>
                             <th>조회수</th>
-                            <td>100</td>
+                            <td>${post.hit}</td>
                             <th>좋아요</th>
-                            <td>10</td>
+                            <td><a href="like?id=${post.id}">${post.like}</a></td>
                         </tr>
                         
                         <tr>
                             <th>작성자</th>
-                            <td colspan="2">James Yates</td>
+                            <td>${post.writer}</td>
                             <th>작성일시</th>
-                            <td colspan="2">2022-08-06</td>
+                            <td>${post.regdate}</td>
+                            <th>싫어요</th>
+                            <td><a href="unlike?id=${post.id}">${post.unlike}</a></td>
                         </tr>
                         
                         <tr>
-                            <td colspan="10"><textarea name="content" readonly> hi</textarea></td>
+                            <td colspan="6"><textarea class="readonly" name="content" readonly> ${post.content}</textarea></td>
+                        </tr>
+                        <tr>
+                        	<th>해시태그</th>
+                            <td colspan="6">
+                            	<c:forEach var="hashtag" items="${hashtags}">
+                            		<span>#${hashtag} </span>
+                            	</c:forEach>
+                            
+                           	</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <div class="center">
-                <div>비밀번호 : <input type="password" name="password" /></div>
-                <a class="w-btn-outline w-btn-gray-outline" type="button" href="reg">수정</a>
-                <a class="w-btn-outline w-btn-gray-outline" type="button" href="index">삭제</a>
+                <a class="w-btn-outline w-btn-gray-outline" type="button" href="update?id=${post.id}">수정</a>
             </div>
         </form>
 

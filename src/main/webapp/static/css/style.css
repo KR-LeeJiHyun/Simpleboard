@@ -225,3 +225,12 @@ textarea{
 {
 	float: right;
 }
+
+.readonly
+{
+	resize: none;
+}
+
+.hidden{
+	display: none;
+}
