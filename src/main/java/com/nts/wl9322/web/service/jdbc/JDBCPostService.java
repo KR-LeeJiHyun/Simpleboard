@@ -22,69 +22,69 @@ import com.nts.wl9322.web.service.PostService;
 //JDBC로 구현된 게시글 서비스 기능 구현
 @Service
 public class JDBCPostService implements PostService{
-	
+
 	@Autowired
 	private DataSource dataSource;
-	
+
 	//JDBC 기본 정보
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
-	
-	//게시글 얻어오기
+
+	//게시글 등록하기
 	public int insertPost(Post post) {
 		int result = 0;
 		//id는 시퀀스를 이용하여 1씩 증가, 조회수,좋아요,싫어요의 경우 등록 시 0
 		String sql = "INSERT INTO POST(id, title, writer, content, regdate, hit, \"LIKE\", unlike, hashtag, password) VALUES(POST_SEQ.NEXTVAL, ?, ?, ?, ?, 0, 0, 0, ?, ?)";
-		
+
 		try {
 			Connection con = dataSource.getConnection();
-			PreparedStatement preparedStatement = con.prepareStatement(sql);
+			PreparedStatement prepared_statement = con.prepareStatement(sql);
 			//게시글 등록을 위해 정보 입력
-			preparedStatement.setString(1, post.getTitle());
-			preparedStatement.setString(2, post.getWriter());
-			preparedStatement.setString(3, post.getContent());
-			preparedStatement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
-			preparedStatement.setString(5, post.getHashtag());
-			preparedStatement.setString(6, post.getPassword());
-		
-			result = preparedStatement.executeUpdate();
-			
-			preparedStatement.close();
+			prepared_statement.setString(1, post.getTitle());
+			prepared_statement.setString(2, post.getWriter());
+			prepared_statement.setString(3, post.getContent());
+			prepared_statement.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+			prepared_statement.setString(5, post.getHashtag());
+			prepared_statement.setString(6, post.getPassword());
+
+			result = prepared_statement.executeUpdate();
+
+			prepared_statement.close();
 			con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return result;
 	}
-	
+
 	public List<PostView> getPostList() {
 		return getPostList("TITLE", "", 1);
 	}
-	
+
 	public List<PostView> getPostList(int page) {
 		return getPostList("TITLE", "", page);
 	}
-	
+
 	public List<PostView> getPostList(String field, String query, int page) {
 		//게시글을 10개 씩 묶어서 처리
 		final int pager = 10;
 		//''를 field에 넣지 않기 위하여 미리 설정
 		String sql = "SELECT * FROM (SELECT ROWNUM NUM, P.* FROM (SELECT * FROM POST_VIEW ORDER BY REGDATE DESC) P WHERE " + field + " LIKE ?) WHERE NUM BETWEEN ? AND ?";
-		
+
 		List<PostView> list = new ArrayList<>();
 		try {
 			Connection con = dataSource.getConnection();
-			PreparedStatement preparedStatement = con.prepareStatement(sql);
+			PreparedStatement prepared_statement = con.prepareStatement(sql);
 			//검색어
-			preparedStatement.setString(1, "%" + query + "%");
+			prepared_statement.setString(1, "%" + query + "%");
 			//해당 페이지의 게시글 시작 번호
-			preparedStatement.setInt(2, 1 + (page - 1) * pager);
+			prepared_statement.setInt(2, 1 + (page - 1) * pager);
 			//해당 페이지의 게시글 끝 번호
-			preparedStatement.setInt(3, page * pager);
-			ResultSet rs = preparedStatement.executeQuery();
-			
+			prepared_statement.setInt(3, page * pager);
+			ResultSet rs = prepared_statement.executeQuery();
+
 			while(rs.next()) {
 				int id = rs.getInt("ID");
 				String title = rs.getString("TITLE"); 
@@ -93,37 +93,251 @@ public class JDBCPostService implements PostService{
 				int hit = rs.getInt("HIT"); 
 				int like = rs.getInt("LIKE");
 				int cmt_count = 0;
-				
+
 				PostView post = new PostView(id, title, writer, regdate, hit, like, cmt_count);
 				list.add(post);
 			}
+
+			prepared_statement.close();
+			con.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return list;
 	}
-	
+
 	public int getPostCount() {
-		String sql = "SELECT COUNT(ID) FROM POST";
+		return getPostCount("TITLE", "");
+	}
+
+	public int getPostCount(String field, String query) {
+		String sql = "SELECT COUNT(ID) FROM (SELECT P.* FROM (SELECT * FROM POST_VIEW ORDER BY REGDATE DESC) P WHERE " + field + " LIKE ?)";
 		int result = 0;
-		
+
 		try {
 			Connection con = dataSource.getConnection();
-			Statement st = con.createStatement();
-			ResultSet rs = st.executeQuery(sql);
-			
+			PreparedStatement prepared_statement = con.prepareStatement(sql);
+			//검색어
+			prepared_statement.setString(1, "%" + query + "%");
+			ResultSet rs = prepared_statement.executeQuery();
+
 			rs.next();
 			result = rs.getInt("count(id)");
+
+			prepared_statement.close();
+			con.close();
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
+		return result;
+	}
+
+	public Post getPost(int id) {
+		String sql = "SELECT * FROM POST WHERE ID = ?";
+		String update_sql = "UPDATE POST SET HIT = ? WHERE ID = ?";
+		Post post = null;
+		int result = 0;
+
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement prepared_statement = con.prepareStatement(sql);
+			PreparedStatement update_prepared_statement = con.prepareStatement(update_sql);
+			prepared_statement.setInt(1, id);
+
+			//게시글 얻어오기
+			ResultSet rs = prepared_statement.executeQuery();
+
+			if(rs.next()) {
+				String title = rs.getString("title");
+				String writer = rs.getString("writer"); 
+				String content = rs.getString("content"); 
+				Date regdate = rs.getDate("regdate"); 
+				int hit = rs.getInt("hit");
+				int like = rs.getInt("like");
+				int unlike = rs.getInt("unlike");
+				String hashtag = rs.getString("hashtag");
+
+				post = new Post(id, title, writer, content, regdate, hit + 1, like, unlike, hashtag, "");
+			}
+
+			//조회수 업데이트
+			update_prepared_statement.setInt(1, post.getHit());
+			update_prepared_statement.setInt(2, id);
+			result = update_prepared_statement.executeUpdate();
+
+			prepared_statement.close();
+			update_prepared_statement.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return post;
+	}
+
+	@Override
+	public Post likePost(int id) {
+		String sql = "SELECT * FROM POST WHERE ID = ?";
+		String update_sql = "UPDATE POST SET \"LIKE\" = ? WHERE ID = ?";
+		Post post = null;
+		int result = 0;
+
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement prepared_statement = con.prepareStatement(sql);
+			PreparedStatement update_prepared_statement = con.prepareStatement(update_sql);
+			prepared_statement.setInt(1, id);
+
+			//게시글 얻어오기
+			ResultSet rs = prepared_statement.executeQuery();
+
+			if(rs.next()) {
+				String title = rs.getString("title");
+				String writer = rs.getString("writer"); 
+				String content = rs.getString("content"); 
+				Date regdate = rs.getDate("regdate"); 
+				int hit = rs.getInt("hit");
+				int like = rs.getInt("like");
+				int unlike = rs.getInt("unlike");
+				String hashtag = rs.getString("hashtag");
+
+				post = new Post(id, title, writer, content, regdate, hit, like + 1, unlike, hashtag, "");
+			}
+
+			//좋아요 업데이트
+			update_prepared_statement.setInt(1, post.getLike());
+			update_prepared_statement.setInt(2, id);
+			result = update_prepared_statement.executeUpdate();
+
+			prepared_statement.close();
+			update_prepared_statement.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return post;
+	}
+
+	public Post unlikePost(int id) {
+		String sql = "SELECT * FROM POST WHERE ID = ?";
+		String update_sql = "UPDATE POST SET UNLIKE = ? WHERE ID = ?";
+		Post post = null;
+		int result = 0;
+
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement prepared_statement = con.prepareStatement(sql);
+			PreparedStatement update_prepared_statement = con.prepareStatement(update_sql);
+			prepared_statement.setInt(1, id);
+
+			//게시글 얻어오기
+			ResultSet rs = prepared_statement.executeQuery();
+
+			if(rs.next()) {
+				String title = rs.getString("title");
+				String writer = rs.getString("writer"); 
+				String content = rs.getString("content"); 
+				Date regdate = rs.getDate("regdate"); 
+				int hit = rs.getInt("hit");
+				int like = rs.getInt("like");
+				int unlike = rs.getInt("unlike");
+				String hashtag = rs.getString("hashtag");
+
+				post = new Post(id, title, writer, content, regdate, hit, like, unlike + 1, hashtag, "");
+			}
+
+			//싫어요 업데이트
+			update_prepared_statement.setInt(1, post.getUnlike());
+			update_prepared_statement.setInt(2, id);
+			result = update_prepared_statement.executeUpdate();
+
+			prepared_statement.close();
+			update_prepared_statement.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return post;
+	}
+
+	public boolean checkPassword(int id, String password) {
+		String sql = "SELECT PASSWORD FROM POST WHERE ID = ?";
+		boolean result = false;
+
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement prepared_statement = con.prepareStatement(sql);
+			prepared_statement.setInt(1, id);
+
+			//게시글 비밀번호 얻어오기
+			ResultSet rs = prepared_statement.executeQuery();
+
+			if(rs.next()) {
+				String encrypt_password = rs.getString("password");
+				if(encrypt_password.compareTo(password) == 0) result = true;
+			}
+
+			prepared_statement.close();
+			con.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
+	public int updatePost(int id, String title, String writer, String content, String hashtag) {
+		String sql = "UPDATE POST SET TITLE=?, WRITER=?, CONTENT=?, HASHTAG=? WHERE ID=?";
+		int result = 0;
+
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement prepared_statement = con.prepareStatement(sql);
+			prepared_statement.setString(1, title);
+			prepared_statement.setString(2, writer);
+			prepared_statement.setString(3, content);
+			prepared_statement.setString(4, hashtag);
+			prepared_statement.setInt(5, id);
+
+			result = prepared_statement.executeUpdate();
+
+			prepared_statement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return result;
 	}
 	
-	
+	@Override
+	public int deletePost(int id) {
+		String sql = "DELETE FROM POST WHERE ID=?";
+		int result = 0;
+
+		try {
+			Connection con = dataSource.getConnection();
+			PreparedStatement prepared_statement = con.prepareStatement(sql);
+			prepared_statement.setInt(1, id);
+
+			result = prepared_statement.executeUpdate();
+
+			prepared_statement.close();
+			con.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return result;
+	}
+
 }
