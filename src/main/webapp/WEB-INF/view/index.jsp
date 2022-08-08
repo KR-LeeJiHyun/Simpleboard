@@ -33,7 +33,7 @@
 		<div class="container">
 			<h2 class="mb-4">게시판</h2>
 			<div class="info">
-				전체 게시글 수 : ${total_post_count} <br /> 전체 댓글 수 : 0
+				전체 게시글 수 : ${total_post_count} <br /> 전체 댓글 수 : ${total_comment_count}
 				<button class="w-btn-outline w-btn-gray-outline reg"
 					onclick="location.href='reg'">글쓰기</button>
 			</div>

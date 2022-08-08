@@ -234,3 +234,7 @@ textarea{
 .hidden{
 	display: none;
 }
+
+.writer{
+	width: 80px;
+}

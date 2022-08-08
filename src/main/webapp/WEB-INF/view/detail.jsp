@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!doctype html>
 <html lang="en">
@@ -77,6 +78,16 @@
         </form>
 
         <div class="comment">
+        	<form method="get" action="comment">
+        		<input class="hidden" readonly type=number name="post_id" value="${post.id}"/>
+        		<input class="hidden" readonly type=number name="group_id" value="0"/>
+        		<input class="hidden" readonly type=number name="depth" value="0"/>
+        		<input class="hidden" readonly type=number name="order" value="0"/>
+        		작성자 : <input type="text" class="writer" name="writer" required />
+        		내용 : <input type="text" name="content" required />
+        		비밀번호 : <input type="password" name="password" required />
+        		<input class="w-btn-outline w-btn-gray-outline" type="submit" value="등록"/>
+        	</form>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -84,29 +95,20 @@
                             <th>댓글 : </th>
                         </tr>
                     </thead>
+                    <c:forEach var="comment" items="${list}">
+                    	<tr>
+                        	<td style="text-indent:${comment.depth * 10}px;">${comment.writer} <fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${comment.regdate}"/></td>
+                    	</tr>
+                    	<tr>
+                       		<td style="text-indent:${comment.depth * 10 + 10}px;">${comment.content}</td>
+                    	</tr>
+                    </c:forEach>
+                    
                     <tr>
                         <td style="text-indent:0px;">누구인가? 2022-08-06 10:15</td>
                     </tr>
                     <tr>
                         <td style="text-indent:10px;">안녕하세요</td>
-                    </tr>
-                    <tr>
-                        <td style="text-indent:10px;">┗궁예? 2022-08-06 10:18</td>
-                    </tr>
-                    <tr>
-                        <td style="text-indent:20px;">반가워요</td>
-                    </tr>
-                    <tr>
-                        <td style="text-indent:20px;">┗왕건? 2022-08-06 10:20</td>
-                    </tr>
-                    <tr>
-                        <td style="text-indent:30px;">반갑습니다.</td>
-                    </tr>
-                    <tr>
-                        <td style="text-indent:0px;">고려 2022-08-06 10:20</td>
-                    </tr>
-                    <tr>
-                        <td style="text-indent:10px;">반갑습니다.</td>
                     </tr>
                 </table>
         </div>
