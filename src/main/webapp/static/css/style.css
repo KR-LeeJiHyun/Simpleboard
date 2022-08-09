@@ -185,7 +185,7 @@ li{
   color: #2c98f0;
 }
 
-.search{
+.search, .comment_update{
   float: right;
 }
 
@@ -237,4 +237,8 @@ textarea{
 
 .writer{
 	width: 80px;
+}
+
+.comment_content {
+	width: 400px;
 }

@@ -96,9 +96,11 @@
 						</c:if>
 					</c:forEach>
 					<!--다음 버튼-->
-					<li><c:if test="${startNum+4<lastNum}">
+					<li>
+						<c:if test="${startNum+4<lastNum}">
 							<a type="button" href="?page=${startNum+5}&field=${param.f}&query=${param.q}">다음</a>
-						</c:if> <c:if test="${startNum+5>=endNum}">
+						</c:if> 
+						<c:if test="${startNum+5>=endNum}">
 							<span type="button" onclick="alert('다음 페이지가 없습니다.');">다음</span>
 						</c:if>
 					</li>
