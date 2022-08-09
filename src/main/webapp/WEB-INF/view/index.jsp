@@ -76,7 +76,7 @@
 			<div class="center">
 				<c:set var="p" value="${(param.page==null)?1:param.page}" />
 				<!--페이지 시작 번호-->
-				<c:set var="startNum" value="${page - (page - 1) % 10}" />
+				<c:set var="startNum" value="${p - (p - 1) % 5}" />
 				<!--페이지 끝 번호-->
 				<c:set var="endNum"
 					value="${fn:substringBefore(Math.ceil(post_count/10), '.')}" />
@@ -97,7 +97,7 @@
 					</c:forEach>
 					<!--다음 버튼-->
 					<li>
-						<c:if test="${startNum+4<lastNum}">
+						<c:if test="${startNum+4<endNum}">
 							<a type="button" href="?page=${startNum+5}&field=${param.f}&query=${param.q}">다음</a>
 						</c:if> 
 						<c:if test="${startNum+5>=endNum}">
