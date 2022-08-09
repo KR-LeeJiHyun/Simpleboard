@@ -54,7 +54,10 @@ public class RegController {
 	public String update(int id, String title, String writer, String content, String hashtag, String password) {
 		String encrypt_password = sha256PasswordEncrypt.encrypt(password);
 		if(jdbcPostService.checkPassword(id, encrypt_password)) jdbcPostService.updatePost(id, title, writer, content, hashtag);
-		else System.out.println("실패!!!!");
+		else {
+			System.out.println("실패!!!!");
+			return "fail";
+		}
 		
 		return "redirect:detail?id=" + id;
 	}
@@ -64,7 +67,10 @@ public class RegController {
 		
 		String encrypt_password = sha256PasswordEncrypt.encrypt(password);
 		if(jdbcPostService.checkPassword(id, encrypt_password)) jdbcPostService.deletePost(id);
-		else System.out.println("실패!!!!");
+		else {
+			System.out.println("실패!!!!");
+			return "fail";
+		}
 		
 		return "redirect:detail?id=" + id;
 	}
