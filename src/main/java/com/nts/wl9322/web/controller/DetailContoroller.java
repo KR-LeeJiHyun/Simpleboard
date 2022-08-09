@@ -25,14 +25,20 @@ public class DetailContoroller {
 	private PasswordEncrypt sha256PasswordEncrypt;
 	
 	@RequestMapping("detail")
-	public String detail(Model model, int id) {
+	public String detail(Model model, int id, Integer page) {
 		Post post = jdbcPostService.getPost(id);
 		String[] hashtags = post.getHashtag().split(",");
 		model.addAttribute("post", post);
 		model.addAttribute("hashtags", hashtags);
-		List<Comment> list = jdbcCommentService.getComment(id); 
+		
+		if(page == null || page == 0) page = 1;
+		List<Comment> list = jdbcCommentService.getComment(id, page); 
 		model.addAttribute("list", list);
-	
+		model.addAttribute("page", page);
+		
+		int last_page = (int)Math.ceil((double)jdbcCommentService.getCommentCount(id) / 5);
+		model.addAttribute("last_page", last_page);
+		
 		return "detail";
 	}
 	
@@ -55,13 +61,48 @@ public class DetailContoroller {
 	}
 	
 	@RequestMapping("comment")
-	public String comment(Model model, int post_id, int group_id, int depth, int order, String writer, String content, String password) {
+	public String comment(Model model, int post_id, String writer, String content, String password) {
 		
 		//비밀번호 암호화
 		String encrypt_password = sha256PasswordEncrypt.encrypt(password);
-		Comment comment = new Comment(0, post_id, depth, group_id, order, content, writer, encrypt_password, null);
-		if(group_id == 0) jdbcCommentService.insertTopComment(comment);
-		else jdbcCommentService.insertComment(comment);
+		Comment comment = new Comment(0, post_id, content, writer, encrypt_password, null);
+		jdbcCommentService.insertComment(comment);
+		
+		return "redirect:detail?id=" + post_id;
+	}
+	
+	@RequestMapping("updateComment")
+	public String updateComment(int id, int post_id, String writer, String content, String password) {
+		
+		//비밀번호 암호화
+		String encrypt_password = sha256PasswordEncrypt.encrypt(password);
+		
+		if(jdbcCommentService.checkPassword(id, encrypt_password)) {
+			Comment comment = new Comment(id, post_id, content, writer, encrypt_password, null);
+			jdbcCommentService.updateComment(comment);
+		}
+		else {
+			System.out.println("실패!!!!");
+			return "fail";
+		}
+		
+		return "redirect:detail?id=" + post_id;
+	}
+	
+	@RequestMapping("deleteComment")
+	public String deleteComment(int id, int post_id, String writer, String content, String password) {
+		
+		//비밀번호 암호화
+		String encrypt_password = sha256PasswordEncrypt.encrypt(password);
+		
+		if(jdbcCommentService.checkPassword(id, encrypt_password)) {
+			Comment comment = new Comment(id, post_id, "", writer, encrypt_password, null);
+			jdbcCommentService.updateComment(comment);
+		}
+		else {
+			System.out.println("실패!!!!");
+			return "fail";
+		}
 		
 		return "redirect:detail?id=" + post_id;
 	}
