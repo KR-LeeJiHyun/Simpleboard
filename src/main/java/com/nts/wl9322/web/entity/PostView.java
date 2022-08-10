@@ -2,7 +2,10 @@ package com.nts.wl9322.web.entity;
 
 import java.util.Date;
 
+//게시글 목록에 표시할 게시글 뷰 객체
 public class PostView extends Post {
+	
+	//게시글 객체를 상속받은 뒤 댓글 수만 추가
 	private int cmt_count;
 	
 	public PostView() {}

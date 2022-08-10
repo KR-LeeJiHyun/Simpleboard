@@ -33,6 +33,7 @@
 			<h2 class="mb-4">게시글</h2>
 			<button class="w-btn-outline w-btn-gray-outline reg"
 				onclick="location.href='index'">목록</button>
+			<!--========게시글 상세========-->
 			<form method="post">
 				<div class="table-responsive">
 					<table class="table table-striped custom-table">
@@ -67,6 +68,7 @@
 							<tr>
 								<th>해시태그</th>
 								<td colspan="6">
+									<!--존재하는 해시태그 만큼 해시태그 출력-->
 									<c:forEach var="hashtag" items="${hashtags}">
 										<span>#${hashtag} </span>
 									</c:forEach>
@@ -80,7 +82,8 @@
 						href="update?id=${post.id}">수정</a>
 				</div>
 			</form>
-
+			
+			<!--========댓글========-->
 			<div class="comment">
 				<div class="table-responsive">
 					<table class="table table-striped">
@@ -106,6 +109,7 @@
 								</td>
 							</tr>
 							<tr>
+							<!--댓글이 삭제되지 않았을 경우-->
 								<c:if test="${!empty comment.content}">
 								<td style="text-indent: 10px;" colspan=2>
 									${comment.content}
@@ -124,6 +128,7 @@
 									</form>
 								</td>
 								</c:if>
+								<!--댓글이 삭제되었을 경우-->
 								<c:if test="${empty comment.content}">
 								<td style="text-indent: 10px;" colspan=2>
 									작성자에 요청으로 인해 삭제된 댓글입니다.
@@ -132,6 +137,7 @@
 							</tr>
 						</c:forEach>
 					</table>
+				<!--=========댓글 더보기======== -->
 				</div>
 				<c:if test="${page+1<=last_page}">
 					<button class="w-btn-outline w-btn-gray-outline reg" onclick="location.href='detail?id=${post.id}&page=${page + 1}'">더보기</button>
