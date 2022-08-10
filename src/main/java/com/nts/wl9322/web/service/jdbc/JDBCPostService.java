@@ -87,7 +87,8 @@ public class JDBCPostService implements PostService{
 			//해당 페이지의 게시글 끝 번호
 			prepared_statement.setInt(3, page * pager);
 			ResultSet rs = prepared_statement.executeQuery();
-
+			
+			//읽어온 게시글들을 리스트에 등록
 			while(rs.next()) {
 				int id = rs.getInt("ID");
 				String title = rs.getString("TITLE"); 
@@ -110,11 +111,13 @@ public class JDBCPostService implements PostService{
 
 		return list;
 	}
-
+	
+	//아무것도 들어오지 않았을 시에 게시글 수
 	public int getPostCount() {
 		return getPostCount("TITLE", "");
 	}
-
+	
+	//검색어에 맞는 게시글 수
 	public int getPostCount(String field, String query) {
 		String sql = "SELECT COUNT(ID) FROM (SELECT P.* FROM (SELECT * FROM POST_VIEW ORDER BY REGDATE DESC) P WHERE " + field + " LIKE ?)";
 		int result = 0;
@@ -140,6 +143,7 @@ public class JDBCPostService implements PostService{
 		return result;
 	}
 
+	//특정 게시글 얻어오기
 	public Post getPost(int id) {
 		String sql = "SELECT * FROM POST WHERE ID = ?";
 		String update_sql = "UPDATE POST SET HIT = ? WHERE ID = ?";
@@ -183,7 +187,7 @@ public class JDBCPostService implements PostService{
 		return post;
 	}
 
-	@Override
+	//특정 게시글 좋아요 업데이트
 	public Post likePost(int id) {
 		String sql = "SELECT * FROM POST WHERE ID = ?";
 		String update_sql = "UPDATE POST SET \"LIKE\" = ? WHERE ID = ?";
@@ -226,7 +230,8 @@ public class JDBCPostService implements PostService{
 
 		return post;
 	}
-
+	
+	//특정 게시글 싫어요 업데이트
 	public Post unlikePost(int id) {
 		String sql = "SELECT * FROM POST WHERE ID = ?";
 		String update_sql = "UPDATE POST SET UNLIKE = ? WHERE ID = ?";
@@ -269,7 +274,8 @@ public class JDBCPostService implements PostService{
 
 		return post;
 	}
-
+	
+	//게시글 비밀번호 확인
 	public boolean checkPassword(int id, String password) {
 		String sql = "SELECT PASSWORD FROM POST WHERE ID = ?";
 		boolean result = false;
@@ -281,7 +287,8 @@ public class JDBCPostService implements PostService{
 
 			//게시글 비밀번호 얻어오기
 			ResultSet rs = prepared_statement.executeQuery();
-
+			
+			//일치 여부 판단
 			if(rs.next()) {
 				String encrypt_password = rs.getString("password");
 				if(encrypt_password.compareTo(password) == 0) result = true;
@@ -295,7 +302,8 @@ public class JDBCPostService implements PostService{
 
 		return result;
 	}
-
+	
+	//특정 게시글 수정
 	public int updatePost(int id, String title, String writer, String content, String hashtag) {
 		String sql = "UPDATE POST SET TITLE=?, WRITER=?, CONTENT=?, HASHTAG=? WHERE ID=?";
 		int result = 0;
@@ -303,10 +311,12 @@ public class JDBCPostService implements PostService{
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement prepared_statement = con.prepareStatement(sql);
+			//특정 게시글 업데이할 제목, 작성자, 내용, 해시태그 설정
 			prepared_statement.setString(1, title);
 			prepared_statement.setString(2, writer);
 			prepared_statement.setString(3, content);
 			prepared_statement.setString(4, hashtag);
+			//업데이트할 게시글 id 설정
 			prepared_statement.setInt(5, id);
 
 			result = prepared_statement.executeUpdate();
@@ -321,7 +331,7 @@ public class JDBCPostService implements PostService{
 		return result;
 	}
 	
-	@Override
+	//특정 게시글 삭제
 	public int deletePost(int id) {
 		String sql = "DELETE FROM POST WHERE ID=?";
 		int result = 0;
@@ -329,6 +339,7 @@ public class JDBCPostService implements PostService{
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement prepared_statement = con.prepareStatement(sql);
+			//삭제할 게시글 id 설정
 			prepared_statement.setInt(1, id);
 
 			result = prepared_statement.executeUpdate();

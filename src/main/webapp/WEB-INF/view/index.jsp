@@ -34,12 +34,14 @@
 			<h2 class="mb-4">게시판</h2>
 			<div class="info">
 				전체 게시글 수 : ${total_post_count} <br /> 전체 댓글 수 : ${total_comment_count}
+				<!--========글쓰기=======-->
 				<button class="w-btn-outline w-btn-gray-outline reg"
 					onclick="location.href='reg'">글쓰기</button>
 			</div>
 			<div class="table-responsive">
 				<c:set var="now" value="<%=new java.util.Date()%>" />
 				<fmt:parseNumber value="${now.time / (1000*60*60*24)}" integerOnly="true" var="today" />
+				<!--=========게시글 목록========-->
 				<table class="table table-striped custom-table">
 					<thead>
 						<tr>
@@ -72,6 +74,7 @@
 					</tbody>
 				</table>
 			</div>
+			<!--=========페이지 표시=========-->
 			<!--10개 묶음으로 페이지 나눌 때 사용-->
 			<div class="center">
 				<c:set var="p" value="${(param.page==null)?1:param.page}" />
@@ -106,6 +109,8 @@
 					</li>
 				</ul>
 			</div>
+			
+			<!--========검색========-->
 			<div class="search">
 				<form>
 					<select name="field">

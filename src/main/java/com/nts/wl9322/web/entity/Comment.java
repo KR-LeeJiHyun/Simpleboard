@@ -15,7 +15,6 @@ public class Comment {
 	
 	//생성자 정의
 	public Comment(int id, int post_id, String content, String writer, String password, Date regdate) {
-		super();
 		this.id = id;
 		this.post_id = post_id;
 		this.content = content;
@@ -23,7 +22,8 @@ public class Comment {
 		this.password = password;
 		this.regdate = regdate;
 	}
-
+	
+	//맴버 변수 getter, setter
 	public int getId() {
 		return id;
 	}

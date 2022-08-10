@@ -30,15 +30,16 @@ public class JDBCCommentService implements CommentService{
 		this.dataSource = dataSource;
 	}
 	
+	//댓글 등록
 	public int insertComment(Comment comment) {
 		int result = 0;
-		//id는 시퀀스를 이용하여 1씩 증가, 조회수,좋아요,싫어요의 경우 등록 시 0
+		//id는 시퀀스를 이용하여 1씩 증가
 		String sql = "INSERT INTO \"COMMENT\"(id, writer, content, regdate, post_id, password) VALUES(COMMENT_SEQ.NEXTVAL, ?, ?, ?, ?, ?)";
 
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement prepared_statement = con.prepareStatement(sql);
-			//게시글 등록을 위해 정보 입력
+			//댓글 등록을 위해 정보 입력
 			prepared_statement.setString(1, comment.getWriter());
 			prepared_statement.setString(2, comment.getContent());
 			prepared_statement.setTimestamp(3, new Timestamp(System.currentTimeMillis()));
@@ -56,6 +57,7 @@ public class JDBCCommentService implements CommentService{
 		return result;
 	}
 	
+	//특정 게시글의 댓글 수 얻어오기
 	public int getCommentCount(int post_id) {
 		String sql = "SELECT COUNT(ID) FROM \"COMMENT\" WHERE POST_ID = ?";
 		int result = 0;
@@ -63,7 +65,7 @@ public class JDBCCommentService implements CommentService{
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement prepared_statement = con.prepareStatement(sql);
-			//검색어
+			//검색어 설정
 			prepared_statement.setInt(1, post_id);
 			ResultSet rs = prepared_statement.executeQuery();
 
@@ -81,7 +83,7 @@ public class JDBCCommentService implements CommentService{
 		return result;
 	}
 	
-	@Override
+	//전체 댓글 수 얻어오기
 	public int getCommentTotalCount() {
 		String sql = "SELECT COUNT(ID) FROM \"COMMENT\"";
 		int result = 0;
@@ -105,9 +107,11 @@ public class JDBCCommentService implements CommentService{
 		return result;
 	}
 	
+	//특정 게시글의 모든 원하는 만큼 얻어오기(여기서는 5의 배수로 읽어옴)
 	public List<Comment> getComment(int post_id, int page) {
 		String sql = "SELECT ROWNUM, C.* FROM (SELECT * FROM \"COMMENT\" WHERE POST_ID = ? ORDER BY REGDATE DESC) C WHERE ROWNUM BETWEEN ? AND ?";
 		List<Comment> list = new ArrayList<>();
+		//댓글을 늘려갈 수
 		int pager = 5;
 
 		try {
@@ -115,10 +119,12 @@ public class JDBCCommentService implements CommentService{
 			PreparedStatement prepared_statement = con.prepareStatement(sql);
 			//검색어
 			prepared_statement.setInt(1, post_id);
+			//1 ~ 현재 상태에서 +5 수만큼 댓글을 더 읽어옴
 			prepared_statement.setInt(2, 1);
 			prepared_statement.setInt(3, page * pager);
 			ResultSet rs = prepared_statement.executeQuery();
 			
+			//읽어온 댓글들을 리스트에 등록
 			while(rs.next()) {
 				int id = rs.getInt("id");
 				String content = rs.getString("content");
@@ -140,6 +146,7 @@ public class JDBCCommentService implements CommentService{
 		return list;
 	}
 	
+	//댓글 수정
 	public int updateComment(Comment comment) {
 		String sql = "UPDATE \"COMMENT\" SET WRITER = ?, CONTENT = ? WHERE ID = ?";
 		int result = 0;
@@ -147,11 +154,13 @@ public class JDBCCommentService implements CommentService{
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement prepared_statement = con.prepareStatement(sql);
+			//업데이트할 댓글 내용 및 작성자 설정
 			prepared_statement.setString(1, comment.getWriter());
 			prepared_statement.setString(2, comment.getContent());
+			//업데이트할 댓글 id 설정
 			prepared_statement.setInt(3, comment.getId());
 
-			//게시글 비밀번호 얻어오기
+			//댓글 비밀번호 얻어오기
 			result = prepared_statement.executeUpdate();
 
 			prepared_statement.close();
@@ -163,6 +172,7 @@ public class JDBCCommentService implements CommentService{
 		return result;
 	}
 	
+	//댓글 비밀번호 확인
 	public boolean checkPassword(int id, String password) {
 		String sql = "SELECT PASSWORD FROM \"COMMENT\" WHERE ID = ?";
 		boolean result = false;
@@ -170,11 +180,13 @@ public class JDBCCommentService implements CommentService{
 		try {
 			Connection con = dataSource.getConnection();
 			PreparedStatement prepared_statement = con.prepareStatement(sql);
+			//특정 댓글을 위한 id 설정
 			prepared_statement.setInt(1, id);
 
 			//댓글 비밀번호 얻어오기
 			ResultSet rs = prepared_statement.executeQuery();
-
+			
+			//일치 여부 판단
 			if(rs.next()) {
 				String encrypt_password = rs.getString("password");
 				if(encrypt_password.compareTo(password) == 0) result = true;

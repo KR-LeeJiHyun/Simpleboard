@@ -49,6 +49,7 @@
                         <tr>
                         <th>Hashtag</th>
                         <td colspan="4" class='hashtag'>
+                        	<!--해시태그 수만큼 해당 해시태그를 출력-->
                         	<c:forEach var="hashtag" items="${hashtags}">
                         		<span class="hashtag-text"><input type="text" name="hashtag" required value="${hashtag}"/>
             					<button class="btn_remove w-btn-outline w-btn-gray-outline">X</button></span>
